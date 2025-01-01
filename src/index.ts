@@ -1,10 +1,20 @@
-import { serve } from '@hono/node-server'
+import { serve, type HttpBindings } from '@hono/node-server'
 import { Hono } from 'hono'
 
-const app = new Hono()
+type Bindings = HttpBindings & {
+  /* ... */
+}
+
+const app = new Hono<{ Bindings: Bindings }>()
 
 app.get('/', (c) => {
   return c.text('Hello Hono!')
+})
+
+app.get('/remote', (c) => {
+  return c.json({
+    remoteAddress: c.env.incoming.socket.remoteAddress,
+  })
 })
 
 const port = 3000
