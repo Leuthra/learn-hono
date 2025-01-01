@@ -1,5 +1,6 @@
 import { serve, type HttpBindings } from '@hono/node-server'
 import { Hono } from 'hono'
+import { serveStatic } from '@hono/node-server/serve-static'
 
 type Bindings = HttpBindings & {
   /* ... */
@@ -16,6 +17,8 @@ app.get('/remote', (c) => {
     remoteAddress: c.env.incoming.socket.remoteAddress,
   })
 })
+
+app.use('*', serveStatic({ root: 'public' }))
 
 const port = 3000
 console.log(`Server is running on http://localhost:${port}`)
